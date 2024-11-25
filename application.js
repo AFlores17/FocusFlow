@@ -1,6 +1,5 @@
 class Application {
     constructor() {
-        // Initialize all properties
         this.prefix = "--web-";
         this.NAVIGATION_CHANGE = "viewChange";
         this.initialized = false;
@@ -12,7 +11,6 @@ class Application {
         this.scaleViewsToFit = false;
         this.apiBaseUrl = "http://127.0.0.1:5000"; // Backend URL
 
-        // Bind context to methods
         this.initialize = this.initialize.bind(this);
         this.resizeHandler = this.resizeHandler.bind(this);
         this.fetchEvents = this.fetchEvents.bind(this);
@@ -21,12 +19,11 @@ class Application {
     }
 
     initialize() {
-        // Initialization
         const view = this.getVisibleView();
         this.collectViews();
         this.collectMediaQueries();
         this.setViewOptions(view);
-        this.fetchEvents(); // Fetch events from the backend on initialization
+        this.fetchEvents(); // Mocked for testing
         window.addEventListener("resize", this.resizeHandler);
         console.log("Application Initialized");
     }
@@ -36,7 +33,6 @@ class Application {
     }
 
     setViewOptions(view) {
-        // Configure view
         this.scaleViewsToFit = true;
         if (view) {
             this.scaleViewToFit(view);
@@ -66,7 +62,6 @@ class Application {
     }
 
     collectMediaQueries() {
-        // Collect media queries for each view
         console.log("Collecting media queries...");
     }
 
@@ -75,39 +70,19 @@ class Application {
     }
 
     async fetchEvents() {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/events`);
-            if (response.ok) {
-                const events = await response.json();
-                console.log("Fetched events:", events);
-                this.displayEvents(events);
-            } else {
-                console.error("Failed to fetch events:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error fetching events:", error);
-        }
+        // Mocking the API response
+        const mockEvents = [
+            { title: "Event 1", date: "2024-01-01", description: "This is a test event." },
+            { title: "Event 2", date: "2024-01-02", description: "Another test event." }
+        ];
+        console.log("Mocked events fetched:", mockEvents);
+        this.displayEvents(mockEvents);
     }
 
     async saveEvent(event) {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/events`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(event),
-            });
-
-            if (response.ok) {
-                console.log("Event saved successfully:", event);
-                this.fetchEvents(); // Refresh the events after saving
-            } else {
-                console.error("Failed to save event:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error saving event:", error);
-        }
+        // Mocking the save API response
+        console.log("Mocked saveEvent called:", event);
+        this.fetchEvents(); // Refresh the mocked events
     }
 
     displayEvents(events) {
@@ -131,4 +106,4 @@ class Application {
     }
 }
 
-export default Application; // 
+export default Application;
