@@ -1,5 +1,5 @@
-/my-application
+/MyProject
 |   |-- index.html
+|   |-- main.js
 |   |-- application.js
-|   |-- .gitignore
-|   |-- README.md
+|   |-- styles.css
