@@ -10,12 +10,15 @@ class Application {
         this.enableDeepLinking = true;
         this.scaleViewsToFit = false;
         this.apiBaseUrl = "http://127.0.0.1:5000"; // Backend URL
+        this.events = []; // Store events locally
 
         this.initialize = this.initialize.bind(this);
         this.resizeHandler = this.resizeHandler.bind(this);
         this.fetchEvents = this.fetchEvents.bind(this);
         this.saveEvent = this.saveEvent.bind(this);
         this.displayEvents = this.displayEvents.bind(this);
+        this.initializeCalendar = this.initializeCalendar.bind(this);
+        this.removeEventFromStorage = this.removeEventFromStorage.bind(this);
     }
 
     initialize() {
@@ -24,6 +27,8 @@ class Application {
         this.collectMediaQueries();
         this.setViewOptions(view);
         this.fetchEvents(); // Mocked for testing
+        this.initializeCalendar(); 
+        this.displayCurrentDate(); 
         window.addEventListener("resize", this.resizeHandler);
         console.log("Application Initialized");
     }
@@ -70,19 +75,21 @@ class Application {
     }
 
     async fetchEvents() {
-        // Mocking the API response
         const mockEvents = [
-            { title: "Event 1", date: "2024-01-01", description: "This is a test event." },
-            { title: "Event 2", date: "2024-01-02", description: "Another test event." }
+            { id: 1, title: "Event 1", date: "2024-01-01", description: "This is a test event." },
+            { id: 2, title: "Event 2", date: "2024-01-02", description: "Another test event." }
         ];
         console.log("Mocked events fetched:", mockEvents);
+        this.events = mockEvents;
         this.displayEvents(mockEvents);
     }
 
     async saveEvent(event) {
-        // Mocking the save API response
-        console.log("Mocked saveEvent called:", event);
-        this.fetchEvents(); // Refresh the mocked events
+        const uniqueId = Date.now(); 
+        const newEvent = { ...event, id: uniqueId };
+        console.log("Mocked saveEvent called:", newEvent);
+        this.events.push(newEvent); 
+        this.displayEvents(this.events); 
     }
 
     displayEvents(events) {
@@ -103,6 +110,56 @@ class Application {
             `;
             eventListContainer.appendChild(eventItem);
         });
+    }
+
+    initializeCalendar() {
+        const calendarEl = document.getElementById("calendar");
+        if (!calendarEl) {
+            console.warn("No container with ID 'calendar' found.");
+            return;
+        }
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            dateClick: (info) => {
+                const title = prompt("Enter event title:");
+                if (title) {
+                    const newEvent = { title, date: info.dateStr, description: "Added via calendar" };
+                    this.saveEvent(newEvent); // Add event to local storage
+                    calendar.addEvent({ id: newEvent.id, title, start: info.dateStr });
+                }
+            },
+            eventClick: (info) => {
+                const confirmDelete = confirm(`Do you want to remove the event "${info.event.title}"?`);
+                if (confirmDelete) {
+                    info.event.remove(); // Remove the event from the calendar
+                    this.removeEventFromStorage(info.event.id); // Remove the event from storage
+                }
+            }
+        });
+
+        calendar.render();
+        this.calendar = calendar; 
+    }
+
+    removeEventFromStorage(eventId) {
+        this.events = this.events.filter(event => event.id !== eventId); 
+        console.log(`Event with ID ${eventId} removed.`);
+    }
+
+    displayCurrentDate() {
+        const currentDate = new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+        const dateContainer = document.getElementById("current-date");
+        if (dateContainer) {
+            dateContainer.innerHTML = `<p>Today's Date: ${currentDate}</p>`;
+        } else {
+            console.warn("No container with ID 'current-date' found.");
+        }
     }
 }
 
