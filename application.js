@@ -9,8 +9,9 @@ class Application {
         this.viewScale = 1;
         this.enableDeepLinking = true;
         this.scaleViewsToFit = false;
-        this.apiBaseUrl = "http://127.0.0.1:5000"; // Backend URL
-        this.events = []; // Store events locally
+        this.apiBaseUrl = "http://127.0.0.1:5000"; 
+        this.events = []; 
+        this.theme = "light"; 
 
         this.initialize = this.initialize.bind(this);
         this.resizeHandler = this.resizeHandler.bind(this);
@@ -18,7 +19,7 @@ class Application {
         this.saveEvent = this.saveEvent.bind(this);
         this.displayEvents = this.displayEvents.bind(this);
         this.initializeCalendar = this.initializeCalendar.bind(this);
-        this.removeEventFromStorage = this.removeEventFromStorage.bind(this);
+        this.setupThemeToggle = this.setupThemeToggle.bind(this);
     }
 
     initialize() {
@@ -27,8 +28,9 @@ class Application {
         this.collectMediaQueries();
         this.setViewOptions(view);
         this.fetchEvents(); // Mocked for testing
-        this.initializeCalendar(); 
-        this.displayCurrentDate(); 
+        this.initializeCalendar();
+        this.displayCurrentDate();
+        this.setupThemeToggle();
         window.addEventListener("resize", this.resizeHandler);
         console.log("Application Initialized");
     }
@@ -85,11 +87,11 @@ class Application {
     }
 
     async saveEvent(event) {
-        const uniqueId = Date.now(); 
+        const uniqueId = Date.now();
         const newEvent = { ...event, id: uniqueId };
         console.log("Mocked saveEvent called:", newEvent);
-        this.events.push(newEvent); 
-        this.displayEvents(this.events); 
+        this.events.push(newEvent);
+        this.displayEvents(this.events);
     }
 
     displayEvents(events) {
@@ -99,10 +101,11 @@ class Application {
             return;
         }
 
-        eventListContainer.innerHTML = ""; // Clear the container
+        eventListContainer.innerHTML = ""; 
         events.forEach(event => {
             const eventItem = document.createElement("div");
             eventItem.className = "event-item";
+            eventItem.id = `event-${event.id}`;
             eventItem.innerHTML = `
                 <h3>${event.title}</h3>
                 <p>Date: ${event.date}</p>
@@ -115,7 +118,7 @@ class Application {
     initializeCalendar() {
         const calendarEl = document.getElementById("calendar");
         if (!calendarEl) {
-            console.warn("No container with ID 'calendar' found.");
+            console.error("Calendar container not found!");
             return;
         }
 
@@ -125,26 +128,34 @@ class Application {
                 const title = prompt("Enter event title:");
                 if (title) {
                     const newEvent = { title, date: info.dateStr, description: "Added via calendar" };
-                    this.saveEvent(newEvent); // Add event to local storage
+                    this.saveEvent(newEvent); 
                     calendar.addEvent({ id: newEvent.id, title, start: info.dateStr });
-                }
-            },
-            eventClick: (info) => {
-                const confirmDelete = confirm(`Do you want to remove the event "${info.event.title}"?`);
-                if (confirmDelete) {
-                    info.event.remove(); // Remove the event from the calendar
-                    this.removeEventFromStorage(info.event.id); // Remove the event from storage
                 }
             }
         });
 
+        console.log("Calendar initialized successfully");
         calendar.render();
-        this.calendar = calendar; 
+        this.calendar = calendar;
     }
 
-    removeEventFromStorage(eventId) {
-        this.events = this.events.filter(event => event.id !== eventId); 
-        console.log(`Event with ID ${eventId} removed.`);
+    setupThemeToggle() {
+        const lightThemeBtn = document.getElementById("light-theme");
+        const darkThemeBtn = document.getElementById("dark-theme");
+
+        lightThemeBtn.addEventListener("click", () => {
+            document.body.classList.remove("dark-theme");
+            document.body.classList.add("light-theme");
+            console.log("Switched to Light Theme");
+            this.theme = "light";
+        });
+
+        darkThemeBtn.addEventListener("click", () => {
+            document.body.classList.remove("light-theme");
+            document.body.classList.add("dark-theme");
+            console.log("Switched to Dark Theme");
+            this.theme = "dark";
+        });
     }
 
     displayCurrentDate() {
