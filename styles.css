@@ -10,53 +10,34 @@ body {
     color: #333;
 }
 
-
 .container {
     display: flex;
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 20px; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 20px; /
+    padding: 20px;
 }
 
 #calendar {
-    margin: 0;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 50%; 
-    max-width: 600px; 
-    min-width: 300px; 
+    width: 90%; 
+    max-width: 800px;
     background-color: #fdfdfd;
     overflow: hidden;
 }
 
 #event-list {
-    margin: 0;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 50%; 
-    max-width: 600px;
-    min-width: 300px;
+    width: 90%; 
+    max-width: 800px;
     background-color: #fdfdfd;
     padding: 10px;
     overflow: hidden;
-}
-
-.event-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.event-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #fafafa;
+    text-align: left; 
 }
 
 .fc-toolbar {
@@ -79,4 +60,43 @@ body {
 .fc-daygrid-event:hover {
     background-color: #0056b3;
     cursor: pointer;
+}
+
+#theme-toggle {
+    margin: 20px;
+    text-align: center;
+}
+
+#theme-toggle button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+body.light-theme {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.dark-theme {
+    background-color: #181818;
+    color: #e0e0e0;
+}
+
+body.dark-theme #calendar,
+body.dark-theme #event-list {
+    background-color: #202020;
+    border: 1px solid #444;
 }
