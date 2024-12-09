@@ -10,20 +10,30 @@
 
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="light-theme">
+    <div id="theme-toggle">
+        <button id="light-theme">Light Theme</button>
+        <button id="dark-theme">Dark Theme</button>
+    </div>
     
     <div id="current-date">
         <p>Loading current date...</p>
     </div>
+
     <div class="container">
+        
         <div id="calendar"></div>
+
         <div id="event-list">
+            <h2>Events</h2>
             <p>Loading events...</p>
         </div>
     </div>
+
     <noscript>
         <p>Please enable JavaScript to view the application.</p>
     </noscript>
+
     <script type="module" src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 </body>
