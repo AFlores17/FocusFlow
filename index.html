@@ -3,38 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application</title>
-    <meta name="description" content="A simple event management application">
-    <meta name="author" content="Your Name">
+    <title>FocusFlow</title>
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
-
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 </head>
 <body class="light-theme">
-    <div id="theme-toggle">
-        <button id="light-theme">Light Theme</button>
-        <button id="dark-theme">Dark Theme</button>
-    </div>
-    
-    <div id="current-date">
-        <p>Loading current date...</p>
-    </div>
-
-    <div class="container">
-        
-        <div id="calendar"></div>
-
-        <div id="event-list">
-            <h2>Events</h2>
-            <p>Loading events...</p>
+    <!-- Header -->
+    <header>
+        <h1 class="app-title">FocusFlow</h1>
+        <div id="theme-toggle">
+            <button id="light-theme">Light Theme</button>
+            <button id="dark-theme">Dark Theme</button>
         </div>
+        <!-- Color Selector Menu -->
+        <div id="color-selector-menu">
+            <select id="color-selector">
+                <option value="">Select a color</option>
+                <option value="#ffcccb">Light Red</option>
+                <option value="#add8e6">Light Blue</option>
+                <option value="#dda0dd">Light Purple</option>
+                <option value="#ffb6c1">Light Pink</option>
+            </select>
+            <button id="reset-color">Reset Background</button>
+        </div>
+    </header>
+
+
+
+    <!-- Views -->
+    <div id="task-details-view" class="container active view">
+        <h2>Task Details</h2>
+        <div id="calendar"></div>
     </div>
 
-    <noscript>
-        <p>Please enable JavaScript to view the application.</p>
-    </noscript>
+   <div id="daily-overview-view" class="container view">
+    <div id="daily-tasks">
+        <!-- Tasks here -->
+    </div>
+</div>
 
-    <script type="module" src="main.js"></script>
+<div id="weekly-overview-view" class="container view">
+    <div id="weekly-tasks">
+        <!-- Tasks here -->
+    </div>
+</div>
+
+
+    <div id="task-creation-view" class="container view">
+        <h2>Create a New Task</h2>
+        <form id="task-form">
+            <label for="task-name">Task:</label>
+            <input type="text" id="task-name" placeholder="Task name" required><br>
+
+            <label for="task-date">Date:</label>
+            <input type="date" id="task-date" required><br>
+
+            <label for="task-importance">Importance (1-10):</label>
+            <input type="number" id="task-importance" min="1" max="10" required><br>
+
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+    <!-- Navigation -->
+    <footer id="bottom-navigation">
+        <button data-target="task-details-view" class="active">Home</button>
+        <button data-target="daily-overview-view">Daily</button>
+        <button data-target="weekly-overview-view">Weekly</button>
+        <button data-target="task-creation-view" id="add-button">+</button>
+    </footer>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="renderer.js"></script>
 </body>
 </html>
